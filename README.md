@@ -44,16 +44,6 @@ For development with auto-reload:
 npm run dev
 ```
 
-### Environment
-
-```
-PORT=3000
-BCRYPT_ROUNDS=10
-NODE_ENV=development
-```
-
-> The `.env` file is git-ignored and must **never** be pushed to a public repo.
-
 ## Logging
 
 Every incoming request is logged via [winston](https://github.com/winstonjs/winston)
