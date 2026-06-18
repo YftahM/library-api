@@ -46,8 +46,6 @@ npm run dev
 
 ### Environment
 
-Copy `.env.example` to `.env`:
-
 ```
 PORT=3000
 BCRYPT_ROUNDS=10
