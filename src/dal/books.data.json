@@ -1,0 +1,42 @@
+[
+  {
+    "id": "book-001",
+    "title": "Dune",
+    "author": "Frank Herbert",
+    "genre": "fiction",
+    "year": 1965,
+    "available": true
+  },
+  {
+    "id": "book-002",
+    "title": "The Hobbit",
+    "author": "J.R.R. Tolkien",
+    "genre": "fiction",
+    "year": 1937,
+    "available": false
+  },
+  {
+    "id": "book-003",
+    "title": "Sapiens: A Brief History of Humankind",
+    "author": "Yuval Noah Harari",
+    "genre": "nonfiction",
+    "year": 2011,
+    "available": true
+  },
+  {
+    "id": "book-004",
+    "title": "Clean Code",
+    "author": "Robert C. Martin",
+    "genre": "nonfiction",
+    "year": 2008,
+    "available": true
+  },
+  {
+    "id": "book-005",
+    "title": "Where the Wild Things Are",
+    "author": "Maurice Sendak",
+    "genre": "childrens",
+    "year": 1963,
+    "available": false
+  }
+]

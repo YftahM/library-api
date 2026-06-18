@@ -1,0 +1,119 @@
+LIBRARY API - how to run + test in Postman
+==========================================
+
+how to run
+----------
+1. npm install
+2. npm start
+3. server runs on http://localhost:3000
+
+for JSON requests in Postman: Body -> raw -> JSON
+(GET / DELETE requests do NOT need a body)
+
+
+=========================================================
+THE 3 REQUIRED GET ROUTES (assignment requirement)
+=========================================================
+
+1) SIMPLE route - list all books
+   GET http://localhost:3000/api/books
+   -> 200, returns the full book catalog (count + books[])
+
+   with QUERY parameters (any combination):
+   GET http://localhost:3000/api/books?genre=fiction
+   GET http://localhost:3000/api/books?genre=nonfiction&available=true
+   GET http://localhost:3000/api/books?author=tolkien
+   query keys: genre = fiction|nonfiction|childrens
+               author = partial text match
+               available = true|false
+
+2) PARAM route - one book by id (from the DAL array)
+   GET http://localhost:3000/api/books/book-001
+   -> 200, returns that single book
+   seed ids: book-001 .. book-005
+   GET http://localhost:3000/api/books/falseid  -> 404 {"message":"Book not found"}
+
+3) EXTERNAL API route - discover books from Open Library
+   GET http://localhost:3000/api/books/discover?q=tolkien
+   GET http://localhost:3000/api/books/discover?q=dune
+   -> 200, returns up to 5 results fetched live from openlibrary.org
+   GET http://localhost:3000/api/books/discover   -> 400 (q is required)
+
+
+=========================================================
+MEMBERS - run these in order
+=========================================================
+
+1) GET http://localhost:3000/api/members/profile/seed-member-roni
+   -> 200, returns the seed member RONI
+
+2) POST http://localhost:3000/api/members/access/enroll/sponsor-123
+   body: { "email": "alice@library.test", "password": "longenough1", "displayName": "Alice" }
+   -> 201
+
+3) POST http://localhost:3000/api/members/access/signin
+   body: { "email": "alice@library.test", "password": "longenough1" }
+   -> 200
+
+4) POST http://localhost:3000/api/members/profile/profile-001
+   body: { "displayName": "Reader One", "biography": "Loves sci-fi" }
+   -> 201
+
+5) PUT http://localhost:3000/api/members/profile/profile-001
+   body: { "displayName": "Reader One Updated", "biography": "Now loves fantasy" }
+   -> 200
+
+6) PATCH http://localhost:3000/api/members/access/rotate
+   body: { "email": "alice@library.test", "currentPassword": "longenough1", "newPassword": "newstrongpass1" }
+   -> 200
+
+7) POST http://localhost:3000/api/members/access/signin
+   body: { "email": "alice@library.test", "password": "newstrongpass1" }
+   -> 200 (using the new password now)
+
+8) POST http://localhost:3000/api/members/access/recover
+   body: { "email": "alice@library.test" }
+   -> 200 ("Recovery email sent")
+
+9) DELETE http://localhost:3000/api/members/profile/seed-member-roni
+   -> 204 (no body)
+
+10) GET http://localhost:3000/api/members/profile/seed-member-roni
+   -> 400 now (we just deleted it)
+
+
+=========================================================
+STUB endpoints (return plain text)
+=========================================================
+GET http://localhost:3000/api/catalog/fiction/bestsellers   -> 200 "Top fiction shelf"
+GET http://localhost:3000/api/loans/overdue/2026            -> 200 "2026"
+
+
+=========================================================
+THINGS THAT SHOULD FAIL (400)
+=========================================================
+- empty body:        POST /api/members/access/signin with body {}        -> 400 "Request payload is required"
+- duplicate email:   redo enroll (step 2) again                          -> 400 "Member already enrolled"
+- bad type:          enroll with "email": 123                            -> 400
+- password too short: enroll with "password": "abc"                      -> 400 "Password length must be between 8 and 64"
+- discover without q: GET /api/books/discover                            -> 400 "Query parameter 'q' is required"
+
+
+=========================================================
+RESETTING THE DATA
+=========================================================
+members are persisted to src/dal/members.data.json
+to reset, replace its contents with this and restart the server:
+
+{
+  "seed-member-roni": {
+    "id": "seed-member-roni",
+    "email": "roni@library.test",
+    "displayName": "RONI",
+    "sponsorId": "house-sponsor",
+    "passwordHash": null
+  }
+}
+
+the book catalog (src/dal/books.data.json) is read-only seed data
+and is reloaded fresh on every server start.

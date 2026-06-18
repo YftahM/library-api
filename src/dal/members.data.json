@@ -1,0 +1,9 @@
+{
+  "seed-member-roni": {
+    "id": "seed-member-roni",
+    "email": "roni@library.test",
+    "displayName": "RONI",
+    "sponsorId": "house-sponsor",
+    "passwordHash": null
+  }
+}
